@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="ifsudestemg.tsi.richardson.taptime.MainActivity"
+    android:visibility="visible"
+    android:id="@+id/layout">
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reiniciar"
+        android:id="@+id/button_restart"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:onClick="restart"
+        android:visibility="invisible" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        android:id="@+id/button_1"
+        android:layout_marginTop="63dp"
+        android:layout_below="@+id/button_restart"
+        android:layout_toLeftOf="@+id/button_restart"
+        android:layout_toStartOf="@+id/button_restart"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2"
+        android:id="@+id/button_2"
+        android:layout_alignTop="@+id/button_1"
+        android:layout_toRightOf="@+id/button_restart"
+        android:layout_toEndOf="@+id/button_restart"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3"
+        android:id="@+id/button_3"
+        android:layout_centerVertical="true"
+        android:layout_toLeftOf="@+id/button_restart"
+        android:layout_toStartOf="@+id/button_restart"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4"
+        android:id="@+id/button_4"
+        android:layout_alignTop="@+id/button_3"
+        android:layout_alignLeft="@+id/button_2"
+        android:layout_alignStart="@+id/button_2"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="5"
+        android:id="@+id/button_5"
+        android:layout_marginTop="59dp"
+        android:layout_below="@+id/button_3"
+        android:layout_toLeftOf="@+id/button_restart"
+        android:layout_toStartOf="@+id/button_restart"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="6"
+        android:id="@+id/button_6"
+        android:layout_alignTop="@+id/button_5"
+        android:layout_alignLeft="@+id/button_4"
+        android:layout_alignStart="@+id/button_4"
+        android:onClick="attempt"
+        android:visibility="visible"
+        android:textColor="#ffffff" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Parabéns!"
+        android:id="@+id/textView_congratulations"
+        android:layout_centerInParent="true"
+        android:visibility="invisible" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:max="100"
+        android:progress="0"
+        android:indeterminate="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Progresso"
+        android:id="@+id/textView"
+        android:layout_above="@+id/progressBar"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/textView_attempts"
+        android:layout_below="@+id/textView_congratulations"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+</RelativeLayout>
