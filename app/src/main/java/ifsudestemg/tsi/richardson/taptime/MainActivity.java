@@ -1,29 +1,38 @@
 package ifsudestemg.tsi.richardson.taptime;
 
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import ifsudestemg.tsi.richardson.database.Database;
+import ifsudestemg.tsi.richardson.database.Jogador;
 
 public class MainActivity extends AppCompatActivity {
     private List<Integer> inativos;
-    private int movimento;
+    private int movimentos;
     private List<Integer> ordem;
-    private List<Integer> cores;
     private ProgressBar progressBar;
     private Vibrator vibrator;
-    private TextView textViewAttempts;
+    private TextView textViewAttempts, textViewRecord;
+    private EditText editTextNomeDoJogador;
     private Button restart_btn;
+    Database db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,19 +42,45 @@ public class MainActivity extends AppCompatActivity {
         vibrator =  (Vibrator) getSystemService(VIBRATOR_SERVICE);
         textViewAttempts = (TextView) findViewById(R.id.textView_attempts);
         restart_btn = (Button) findViewById(R.id.button_restart);
+        editTextNomeDoJogador = (EditText) findViewById(R.id.editText_NomeJogador);
+        textViewRecord= (TextView) findViewById(R.id.textView_Record);
+
+        editTextNomeDoJogador.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                boolean handled = false;
+                if(editTextNomeDoJogador.getText().toString().trim().equals("")){
+                    Toast.makeText(getApplicationContext(), "Forneça um nome", Toast.LENGTH_SHORT).show();
+                }else
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    salvarDados();
+                    editTextNomeDoJogador.setVisibility(View.INVISIBLE);
+                    textViewRecord.setVisibility(View.INVISIBLE);
+                    editTextNomeDoJogador.setText("");
+                    //handled = true;
+
+                }
+                return handled;
+            }
+        });
         start();
-    }
+
+        db = new Database(this);
+        for(Jogador j : db.all())
+            Log.d("Jogador: ", j.toString());
+
+    }//onCreate
 
     private void start() {
-        inativos = new ArrayList<Integer>();
+        inativos = new ArrayList<>();
         ordem = getNumbers();
-        movimento = 0;
-        cores = setButtonColors();
+        Log.d("Números corretos: ", ordem.toString());
+        movimentos = 0;
+        setButtonColors();
         progressBar.setProgress(0);
         //System.out.println("Numeros: " + ordem.toString());
         restart_btn.setVisibility(View.INVISIBLE);
         textViewAttempts.setVisibility(View.INVISIBLE);
-
     }
 
     public void restart(View view){
@@ -54,42 +89,49 @@ public class MainActivity extends AppCompatActivity {
         for (Integer n : inativos) {
             findViewById(n).setVisibility(View.VISIBLE);
         }
-        inativos = new ArrayList<Integer>();
+        inativos = new ArrayList<>();
         ordem = getNumbers();
-        cores = setButtonColors();
+        setButtonColors();
         progressBar.setProgress(0);
         findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
         restart_btn.setVisibility(View.INVISIBLE);
         textViewAttempts.setVisibility(View.INVISIBLE);
+        editTextNomeDoJogador.setVisibility(View.INVISIBLE);
+        textViewRecord.setVisibility(View.INVISIBLE);
+        movimentos = 0;
     }
 
-    public void attempt(View view) {
+    public void tentativa(View view) {
         Button button = (Button) view;
         int number = Integer.parseInt(button.getText().toString());
+
+        movimentos++;
 
         if (number == ordem.get(inativos.size())) { // Botao certo clicaodEsconder botao
 
             inativos.add(button.getId());
             view.setVisibility(View.INVISIBLE);
-
             findViewById(R.id.layout).setBackgroundColor(((ColorDrawable)view.getBackground()).getColor());
-            movimento++;
-
             vibrator.vibrate(50);
-
             progressBar.setProgress(100/6 * inativos.size());
 
-            if(inativos.size() == 6){ // Congratulations!
+            if(inativos.size() == 6){ // Fim de jogo!
                 findViewById(R.id.textView_congratulations).setVisibility(View.VISIBLE);
                 progressBar.setProgress(100);
 
-                textViewAttempts.setText("Finalizado com " + movimento + " movimentos!");
+                textViewAttempts.setText(String.format(Locale.ENGLISH,"Finalizado com %d movimentos!", movimentos));
                 textViewAttempts.setVisibility(View.VISIBLE);
+
+                textViewRecord.setVisibility(View.VISIBLE);
+                editTextNomeDoJogador.setVisibility(View.VISIBLE);
 
                 restart_btn.setVisibility(View.VISIBLE);
 
+                findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
+
                 long[] pattern = {0,200,200,200};
                 vibrator.vibrate(pattern,-1);
+
             }
 
         } else { // Botao errado clicado
@@ -97,13 +139,12 @@ public class MainActivity extends AppCompatActivity {
             for (Integer n : inativos) {
                 findViewById(n).setVisibility(View.VISIBLE);
             }
-            inativos = new ArrayList<Integer>();
+            inativos = new ArrayList<>();
             findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
 
             progressBar.setProgress(0);
         }
-
-    }
+    }//tentativa
 
     private List<Integer> getNumbers() {
         List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6);
@@ -128,4 +169,9 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.button_6).setBackgroundColor(colors.get(5));
         return colors;
     }
-}
+
+    private void salvarDados(){
+        Toast.makeText(MainActivity.this, "Recorde salvo!",Toast.LENGTH_SHORT).show();
+        db.insert(new Jogador(editTextNomeDoJogador.getText().toString(),movimentos));
+    }
+}//MainActivity

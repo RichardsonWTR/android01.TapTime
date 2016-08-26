@@ -30,7 +30,7 @@
         android:layout_below="@+id/button_restart"
         android:layout_toLeftOf="@+id/button_restart"
         android:layout_toStartOf="@+id/button_restart"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -42,7 +42,7 @@
         android:layout_alignTop="@+id/button_1"
         android:layout_toRightOf="@+id/button_restart"
         android:layout_toEndOf="@+id/button_restart"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -54,7 +54,7 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/button_restart"
         android:layout_toStartOf="@+id/button_restart"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -66,7 +66,7 @@
         android:layout_alignTop="@+id/button_3"
         android:layout_alignLeft="@+id/button_2"
         android:layout_alignStart="@+id/button_2"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -79,7 +79,7 @@
         android:layout_below="@+id/button_3"
         android:layout_toLeftOf="@+id/button_restart"
         android:layout_toStartOf="@+id/button_restart"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -91,7 +91,7 @@
         android:layout_alignTop="@+id/button_5"
         android:layout_alignLeft="@+id/button_4"
         android:layout_alignStart="@+id/button_4"
-        android:onClick="attempt"
+        android:onClick="tentativa"
         android:visibility="visible"
         android:textColor="#ffffff" />
 
@@ -101,8 +101,10 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Parabéns!"
         android:id="@+id/textView_congratulations"
-        android:layout_centerInParent="true"
-        android:visibility="invisible" />
+        android:visibility="invisible"
+        android:layout_alignBottom="@+id/button_1"
+        android:layout_toRightOf="@+id/button_1"
+        android:layout_toEndOf="@+id/button_1" />
 
     <ProgressBar
         style="?android:attr/progressBarStyleHorizontal"
@@ -132,6 +134,30 @@
         android:id="@+id/textView_attempts"
         android:layout_below="@+id/textView_congratulations"
         android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Guarde seu recorde!"
+        android:id="@+id/textView_Record"
+        android:layout_above="@+id/button_5"
+        android:layout_centerHorizontal="true"
+        android:visibility="invisible" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editText_NomeJogador"
+        android:layout_above="@+id/button_6"
+        android:layout_alignRight="@+id/button_6"
+        android:layout_alignEnd="@+id/button_6"
+        android:layout_alignLeft="@+id/button_5"
+        android:layout_alignStart="@+id/button_5"
+        android:imeOptions="actionDone"
         android:visibility="invisible" />
 
 </RelativeLayout>
