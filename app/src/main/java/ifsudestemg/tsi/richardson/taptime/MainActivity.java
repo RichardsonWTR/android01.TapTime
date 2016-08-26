@@ -1,6 +1,8 @@
 package ifsudestemg.tsi.richardson.taptime;
 
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,6 +19,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -31,7 +34,8 @@ public class MainActivity extends AppCompatActivity {
     private Vibrator vibrator;
     private TextView textViewAttempts, textViewRecord;
     private EditText editTextNomeDoJogador;
-    private Button restart_btn;
+    private Button restartBtn;
+    private Button recordesBtn;
     Database db;
 
     @Override
@@ -41,9 +45,10 @@ public class MainActivity extends AppCompatActivity {
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
         vibrator =  (Vibrator) getSystemService(VIBRATOR_SERVICE);
         textViewAttempts = (TextView) findViewById(R.id.textView_attempts);
-        restart_btn = (Button) findViewById(R.id.button_restart);
+        restartBtn = (Button) findViewById(R.id.button_restart);
         editTextNomeDoJogador = (EditText) findViewById(R.id.editText_NomeJogador);
         textViewRecord= (TextView) findViewById(R.id.textView_Record);
+        recordesBtn = (Button) findViewById(R.id.button_Recordes);
 
         editTextNomeDoJogador.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
@@ -79,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         setButtonColors();
         progressBar.setProgress(0);
         //System.out.println("Numeros: " + ordem.toString());
-        restart_btn.setVisibility(View.INVISIBLE);
+        restartBtn.setVisibility(View.INVISIBLE);
         textViewAttempts.setVisibility(View.INVISIBLE);
     }
 
@@ -94,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
         setButtonColors();
         progressBar.setProgress(0);
         findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
-        restart_btn.setVisibility(View.INVISIBLE);
+        restartBtn.setVisibility(View.INVISIBLE);
         textViewAttempts.setVisibility(View.INVISIBLE);
         editTextNomeDoJogador.setVisibility(View.INVISIBLE);
         textViewRecord.setVisibility(View.INVISIBLE);
@@ -116,22 +121,7 @@ public class MainActivity extends AppCompatActivity {
             progressBar.setProgress(100/6 * inativos.size());
 
             if(inativos.size() == 6){ // Fim de jogo!
-                findViewById(R.id.textView_congratulations).setVisibility(View.VISIBLE);
-                progressBar.setProgress(100);
-
-                textViewAttempts.setText(String.format(Locale.ENGLISH,"Finalizado com %d movimentos!", movimentos));
-                textViewAttempts.setVisibility(View.VISIBLE);
-
-                textViewRecord.setVisibility(View.VISIBLE);
-                editTextNomeDoJogador.setVisibility(View.VISIBLE);
-
-                restart_btn.setVisibility(View.VISIBLE);
-
-                findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
-
-                long[] pattern = {0,200,200,200};
-                vibrator.vibrate(pattern,-1);
-
+                fimDeJogo();
             }
 
         } else { // Botao errado clicado
@@ -173,5 +163,43 @@ public class MainActivity extends AppCompatActivity {
     private void salvarDados(){
         Toast.makeText(MainActivity.this, "Recorde salvo!",Toast.LENGTH_SHORT).show();
         db.insert(new Jogador(editTextNomeDoJogador.getText().toString(),movimentos));
+    }
+
+    private void fimDeJogo(){
+        findViewById(R.id.textView_congratulations).setVisibility(View.VISIBLE);
+        progressBar.setProgress(100);
+
+        textViewAttempts.setText(String.format(Locale.ENGLISH,"Finalizado com %d movimentos!", movimentos));
+        textViewAttempts.setVisibility(View.VISIBLE);
+
+        textViewRecord.setVisibility(View.VISIBLE);
+        editTextNomeDoJogador.setVisibility(View.VISIBLE);
+
+        restartBtn.setVisibility(View.VISIBLE);
+
+        findViewById(R.id.layout).setBackgroundColor(0xFFFFFFFF);
+
+        long[] pattern = {0,200,200,200};
+        vibrator.vibrate(pattern,-1);
+    }
+
+    public void irParaActivityRecordes(View view){
+        Intent intent = new Intent(this,ListaDeRecordes.class);
+        Bundle bundle = new Bundle();
+
+        List<Jogador> list =  db.all();
+
+        Collections.sort(list, new Comparator<Jogador>() {
+            @Override
+            public int compare(Jogador j1, Jogador j2) {
+                if (j1.getPontuacao() < j2.getPontuacao()) return -1;
+                if (j1.getPontuacao() == j2.getPontuacao()) return 0;
+                return 1;
+            }
+        });
+
+        bundle.putParcelableArrayList("Jogadores", (ArrayList<? extends Parcelable>) list);
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }//MainActivity

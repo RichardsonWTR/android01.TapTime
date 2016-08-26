@@ -160,4 +160,15 @@
         android:imeOptions="actionDone"
         android:visibility="invisible" />
 
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Recordes"
+        android:id="@+id/button_Recordes"
+        android:layout_above="@+id/textView"
+        android:layout_centerHorizontal="true"
+        android:nestedScrollingEnabled="false"
+        android:onClick="irParaActivityRecordes" />
+
 </RelativeLayout>
